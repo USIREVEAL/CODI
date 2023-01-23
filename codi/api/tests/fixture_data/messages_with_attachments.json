@@ -1,0 +1,41 @@
+{
+  "messages": [
+    {
+      "authorId": "861937276815409174",
+      "id": "938733699669848064",
+      "content": "",
+      "timestamp": "2022-02-03T09:52:34.83+00:00",
+      "attachments" : [
+        {
+            "url" : "https://cdn.discordapp.com/attachments/300020095844089856/937650944156516352/1.1_Tree_in_composite_edges_not_ok.png"
+        }
+      ]
+    },
+    {
+      "authorId": "861937276815409174",
+      "id": "940033847800766474",
+      "content": "",
+      "timestamp": "2022-02-06T23:58:54.3+00:00",
+      "attachments" : [
+        {
+          "url" : "https://cdn.discordapp.com/attachments/300020095844089856/937650944156516352/1.1_Tree_in_composite_edges_not_ok.png"
+        },
+        {
+          "url" : "https://cdn.discordapp.com/attachments/300020095844089856/937650944429142036/1.2_Tree_in_composite_with_edges_ok.png"
+        },
+        {
+          "url" : "https://cdn.discordapp.com/attachments/300020095844089856/937650944680812554/2.1_Tree_not_in_composite_edges_not_ok.png"
+        },
+        {
+          "url" : "https://cdn.discordapp.com/attachments/300020095844089856/937650945016336395/2.2_Tree_not_in_composite_edges_ok.png"
+        }
+      ]
+    },
+    {
+      "authorId": "861937276815409174",
+      "id": "939541995662217246",
+      "content": "Does it recognize inline blocks inside of code blocks? ```st\nvar j = 0;\n`ciao`\nvar k = 0;\nvar l = 0;\n```",
+      "timestamp": "2022-02-05T15:24:27.612+00:00"
+    }
+  ]
+}

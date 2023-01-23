@@ -1,0 +1,28 @@
+{
+  "messages": [
+    {
+      "authorId": "861937276815409174",
+      "id": "940033847800766474",
+      "content": "This is where you can find the icorsi page for the lecture <https://www.icorsi.ch/course/view.php?id=58473>",
+      "timestamp": "2022-02-06T23:58:54.3+00:00"
+    },
+    {
+      "authorId": "575214823022002177",
+      "id": "939964765420273684",
+      "content": "Why does it not embed https://icorsi.ch/course/view.php?id=58473 or https://icorsi.ch/course/view.php?id=58473&embed=1",
+      "timestamp": "2022-02-06T19:24:23.777+00:00"
+    },
+    {
+      "authorId": "861937276815409174",
+      "id": "939541995662217246",
+      "content": "I think that the link https://icorsi is broken",
+      "timestamp": "2022-02-05T15:24:27.612+00:00"
+    },
+    {
+      "authorId": "861937276815409174",
+      "id": "938733699669848064",
+      "content": "<https://icorsi.com><https://icorsi.com>",
+      "timestamp": "2022-02-03T09:52:34.83+00:00"
+    }
+  ]
+}

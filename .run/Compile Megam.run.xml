@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Run Server" type="CompoundRunConfigurationType">
+    <toRun name="Start server" type="Python.DjangoServer" />
+    <toRun name="Make clean" type="MAKEFILE_TARGET_RUN_CONFIGURATION" />
+    <toRun name="Make dependencies" type="MAKEFILE_TARGET_RUN_CONFIGURATION" />
+    <toRun name="Make megam" type="MAKEFILE_TARGET_RUN_CONFIGURATION" />
+    <method v="2" />
+  </configuration>
+</component>

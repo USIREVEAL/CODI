@@ -1,0 +1,283 @@
+{% extends "base_generic.html" %}
+
+{% block head %}
+    <style>
+        #drop_zone {
+            display: flex;
+            border: 2px dashed lightgray;
+            height: 100%;
+        }
+
+        #spinner {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            height: calc(100% - 55px);
+            row-gap: 20px;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.61);
+            z-index: 1000;
+        }
+
+        #drop_zone_inner {
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            margin: auto;
+        }
+
+        #drop_zone p {
+            color: lightgray;
+            text-align: center;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid" style="position: absolute; height: calc(100% - 56px)">
+        <div class="row gx-5" style="margin: 30px -5px; height: calc(100% - 56px)">
+            <div class="col-md-10">
+                <div id="drop_zone" ondrop="dropHandler(event);" ondragover="dragOverHandler(event);" ondragleave="dragLeaveHandler()">
+                    <div id="drop_zone_inner">
+                        <p>Drag your JSON/ANNOT file here</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <label for="select-op">Operation</label>
+                <select class="form-select" id="select-op" style="margin: 20px; width: auto">
+                    <option selected value="train">Train</option>
+                    <option value="validate">Validate</option>
+                    <option value="predict">Predict</option>
+                </select>
+
+                <label for="select">Platform</label>
+                <select class="form-select" id="select" style="margin: 20px; width: auto">
+                    <option selected value="auto">Auto</option>
+                    <option value="discord">Discord</option>
+                    <option value="slack">Slack</option>
+                </select>
+
+                <label for="select-features">Features</label>
+                <ul class="list-group rounded-0" style="margin-left: 20px">
+                    <li class="list-group-item border-0 d-flex align-items-center ps-0">
+                        <label>
+                            <input class="form-check-input me-3" id="chat" type="checkbox" value="chat" checked />
+                        </label>
+                        Chat-Specific
+                    </li>
+
+                    <li class="list-group-item border-0 d-flex align-items-center ps-0">
+                        <label>
+                            <input class="form-check-input me-3" id="discourse" type="checkbox" value="discourse" checked />
+                        </label>
+                        Discourse
+                    </li>
+
+                    <li class="list-group-item border-0 d-flex align-items-center ps-0">
+                        <label>
+                            <input class="form-check-input me-3" id="content" type="checkbox" value="content" checked />
+                        </label>
+                        Content
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="spinner" hidden>
+        <div class="spinner-border text-light" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+
+        <div>Crunching data, this may take a while...</div>
+    </div>
+
+    <script>
+        async function dropHandler(ev) {
+            ev.preventDefault()
+            let re = /(?:\.([^.]+))?$/
+
+            if (ev.dataTransfer.items.length > 1) {
+                alert('Only one file can be uploaded at a time.')
+
+                document.getElementById('drop_zone').style.borderColor = "lightgray"
+                document.querySelector('#drop_zone p').style.color = "lightgray"
+            } else if (ev.dataTransfer.items[0].getAsFile().type !== 'application/json' && re.exec(ev.dataTransfer.items[0].getAsFile().name)[1] === 'annot') {
+                let file = await ev.dataTransfer.items[0].getAsFile().text()
+
+                document.getElementById('spinner').hidden = false
+
+                let xhr = new XMLHttpRequest()
+                xhr.open("POST", `/api/convert`, true)
+                xhr.onreadystatechange = async () => {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            let features = [0, 0, 0]
+                            const platforms = ["discord", "slack"]
+                            let new_file = JSON.parse(xhr.responseText);
+
+                            if (document.getElementById('chat').checked) {
+                                features[0] = 1
+                            }
+
+                            if (document.getElementById('discourse').checked) {
+                                features[1] = 1
+                            }
+
+                            if (document.getElementById('content').checked) {
+                                features[2] = 1
+                            }
+
+                            new_file.features = features
+
+                            if (document.getElementById("select").value === "auto" && (new_file.platform === undefined || !platforms.includes(new_file.platform.toLowerCase()))) {
+                                alert("The community's platform is not supported yet")
+
+                                document.getElementById('drop_zone').style.borderColor = "lightgray"
+                                document.querySelector('#drop_zone p').style.color = "lightgray"
+
+                                document.getElementById('spinner').hidden = true
+
+                                return
+                            } else if (document.getElementById("select").value !== "auto") {
+                                new_file.platform = `${document.getElementById("select").value}`
+                            }
+
+                            let xhr_inner = new XMLHttpRequest()
+                            xhr_inner.open("POST", `/api/${document.getElementById("select-op").value}`, true)
+                            xhr_inner.setRequestHeader('Content-Type', 'application/json')
+                            xhr_inner.send(JSON.stringify(new_file))
+                            xhr_inner.addEventListener("load", transferComplete)
+                            xhr_inner.addEventListener("error", transferFailed)
+                        } else {
+                            let error = JSON.parse(xhr.response)
+
+                            if (error.error === "") {
+                                alert("Unknown error, please try again.")
+                            } else {
+                                alert(`ERROR: ${error.error}`)
+                            }
+
+                            window.location.href = "/"
+                        }
+                    }
+                }
+                xhr.setRequestHeader('Content-Type', 'text/plain')
+                xhr.send(file)
+                xhr.addEventListener("error", transferFailed)
+            } else if (document.getElementById("select-op").value !== 'predict' && ev.dataTransfer.items[0].getAsFile().type !== 'application/json' && re.exec(ev.dataTransfer.items[0].getAsFile().name)[1] !== 'annot') {
+                alert('File must be either JSON or ANNOT.')
+
+                document.getElementById('drop_zone').style.borderColor = "lightgray"
+                document.querySelector('#drop_zone p').style.color = "lightgray"
+            } else {
+                let features = [0, 0, 0]
+                const platforms = ["discord", "slack"]
+
+                document.getElementById('spinner').hidden = false
+
+                let file = await ev.dataTransfer.items[0].getAsFile().text()
+                file = JSON.parse(file)
+
+                if (document.getElementById('chat').checked) {
+                    features[0] = 1
+                }
+
+                if (document.getElementById('discourse').checked) {
+                    features[1] = 1
+                }
+
+                if (document.getElementById('content').checked) {
+                    features[2] = 1
+                }
+
+                file.features = features
+
+                if (document.getElementById("select").value === "auto" && (file.platform === undefined || !platforms.includes(file.platform.toLowerCase()))) {
+                    alert("The community's platform is not supported yet")
+
+                    document.getElementById('drop_zone').style.borderColor = "lightgray"
+                    document.querySelector('#drop_zone p').style.color = "lightgray"
+
+                    document.getElementById('spinner').hidden = true
+
+                    return
+                } else if (document.getElementById("select").value !== "auto") {
+                    file.platform = `${document.getElementById("select").value}`
+                }
+
+                document.querySelector('#drop_zone p').innerHTML = `"${file.name}" uploaded`
+
+                let xhr = new XMLHttpRequest()
+                xhr.open("POST", `/api/${document.getElementById("select-op").value}`, true)
+                xhr.setRequestHeader('Content-Type', 'application/json')
+                xhr.onreadystatechange = async () => {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 400) {
+                            let error = JSON.parse(xhr.response)
+
+                            if (error.error === "") {
+                                alert("Unknown error, please try again.")
+                            } else {
+                                alert(`ERROR: ${error.error}`)
+                            }
+
+                            window.location.href = "/"
+                        }
+                    }
+                }
+                xhr.send(JSON.stringify(file))
+                xhr.addEventListener("load", transferComplete)
+                xhr.addEventListener("error", transferFailed)
+            }
+        }
+
+        function transferComplete() {
+            if (this.status === 500) {
+                alert("A server-side error occurred.")
+                window.location.href = "/"
+            } else if (this.status === 200) {
+                if (document.getElementById("select-op").value === 'train') {
+                    alert("The Training operation terminated successfully")
+                    window.location.href = "/"
+                } else {
+                    switch (document.getElementById("select-op").value) {
+                        case "validate":
+                            alert("The validation operation terminated successfully, you will now be redirected.")
+                            window.location.href = '/statistics/validation'
+                            break
+                        case "predict":
+                            alert("The prediction operation terminated successfully, you will now be redirected.")
+                            window.location.href = '/statistics/prediction'
+                            break
+                    }
+
+                    document.getElementById('spinner').hidden = true
+                }
+            }
+        }
+
+        function transferFailed() {
+            alert("Error when processing the data")
+            document.getElementById('spinner').hidden = true
+            window.location.href = "/"
+        }
+
+        function dragOverHandler(ev) {
+            ev.preventDefault();
+
+            document.getElementById('drop_zone').style.borderColor = "#0B6EFD"
+            document.querySelector('#drop_zone p').style.color = "#0B6EFD"
+        }
+
+        function dragLeaveHandler() {
+            document.getElementById('drop_zone').style.borderColor = "lightgray"
+            document.querySelector('#drop_zone p').style.color = "lightgray"
+        }
+    </script>
+{% endblock %}

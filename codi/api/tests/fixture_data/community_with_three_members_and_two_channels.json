@@ -1,0 +1,84 @@
+{
+  "platform": "discord",
+  "id": "981348383829",
+  "name" : "Pharo",
+  "members" : [
+    {
+      "nickname" : null,
+      "id" : "575214823022002177",
+      "name" : "plalevee",
+      "uniqueName" : "plalevee#7630"
+    },
+    {
+      "nickname" : null,
+      "id" : "786005207262953563",
+      "name" : "habinnj",
+      "uniqueName" : "habinnj#1854"
+    },
+    {
+      "nickname": null,
+      "id": "861937276815409174",
+      "name": "brice",
+      "uniqueName": "brice#2692"
+    }
+  ],
+  "channels" : [
+    {
+      "name" : "general",
+      "id" : "575214823022002177",
+      "path" : "Pharo/general",
+      "topics" : [
+        {
+          "keywords" : [ ],
+          "description" : "Agile Visualization to its greatest! https://AgileVisualization.com"
+        }
+      ],
+      "messages" : [
+        {
+          "authorId" : "861937276815409174",
+          "id" : "940033847800766474",
+          "content" : "OK, I boiled it down to the Pharo 9 code below. Try with the lineItemsCount: set to 1, 2 and then 4. The hover popup only works for the plot(s) in the first column. Also note that the vertical tick is absent in all cases, but present when you inspect each element of the charts variable. Perhaps I am doing something I am not supposed to do.\nThanks, Dave\n\ncharts := (1 to: 4) collect: [ :e |\n    | chart lp1 popup |\n    chart := RSChart new.\n    lp1 := RSLinePlot new\n        x: (1 to: 30)\n        y: (Array new: 30 withAll: 50);\n        color: Color red.\n    popup := RSPopupDecoration new.\n    popup chartPopupBuilder for: lp1 text: 'Plot 1' color: #red.\n    chart addPlot: lp1; addDecoration: popup.\n    chart minValueY: 0; maxValueY: 110.\n    chart addDecoration: (RSVerticalTick new\n        numberOfTicks: 10;\n        labelConversion: [ :value | value asString,'%' ];\n        yourself).\n    chart build.\n    chart ].\ncanvas := RSCanvas new.\ncompositeShapes := charts collect:[ :eachChart | eachChart container asShape ].\ncanvas addAll: compositeShapes.\nRSGridLayout new lineItemsCount: 2; gapSize: 10; on: compositeShapes.\ncanvas @ RSCanvasController.\ncanvas open\n\nEDIT: I just noticed that the label conversion isn't working either, maybe that's a clue.",
+          "timestamp" : "2022-02-06T23:58:54.3+00:00"
+        },
+        {
+          "authorId" : "575214823022002177",
+          "id" : "939964765420273684",
+          "content" : "Do you have a code snippet we can try? It is not clear from your description what the problem can be. What do you mean with _\"transfer their shapes to a new canvas for rendering\"_?",
+          "timestamp" : "2022-02-06T19:24:23.777+00:00"
+        },
+        {
+          "authorId" : "861937276815409174",
+          "id" : "939541995662217246",
+          "content" : "Loving Roassal, everything just seems to work! But now I cannot get my LinePlot popup to work properly. I have a method that creates an RSChart with two RSLinePlots and a popup to show the point values on hover. I create 4 of these charts and then transfer their shapes to a new canvas for rendering.\n\nBut on some of the charts the popup does not work (it looks like the code finds a x position out of range). I am not sure if this is a bug, or my misuse of the tools, or perhaps both. One reason for thinking the latter is that the RSChartSpineDecoration does not appear at all on the hover; maybe I don't know how to correctly render 4 charts with popups on the same canvas. A reason for suspecting a bug is that when all 4 charts are arranged vertically, the popup works on each of them, when arranged horizontally it only works on the first one, and when arranged in a 2x2 grid the popup works on both charts in the first column.\n\nThank you for any guidance.",
+          "timestamp" : "2022-02-05T15:24:27.612+00:00",
+          "attachments" : [
+            {
+              "url" : "https://cdn.discordapp.com/attachments/300020095844089856/939541992998834256/Screenshot_2022-02-05_110246.png"
+            },
+            {
+              "url" : "https://cdn.discordapp.com/attachments/300020095844089856/939541993388900402/Screenshot_2022-02-05_110412.png"
+            },
+            {
+              "url" : "https://cdn.discordapp.com/attachments/300020095844089856/939541993586057236/Screenshot_2022-02-05_110443.png"
+            },
+            {
+              "url" : "https://cdn.discordapp.com/attachments/300020095844089856/939541993778978816/Screenshot_2022-02-05_110457.png"
+            }
+          ]
+        },
+        {
+          "authorId" : "861937276815409174",
+          "id" : "938733699669848064",
+          "content" : "Thanks for the suggestions. I've got the first display of spec working, and need to proceed with figuring out the configuring. However, the attraction of doing the whole UI using Roassal is that I would have a \"scalable\" UI, that the user could \"shrink\". For my application this would be great, as it is a control surface for another app, that could sit nicely \"minimised\"  in the corner of the screen whilst still being fully functional. Reminds me of a couple of the Sisyphus Axioms:\n1.  There is always a user for whom the system is not designed\n2. There is always a purpose for which the system is not designed",
+          "timestamp" : "2022-02-03T09:52:34.83+00:00"
+        }
+      ]
+    },
+    {
+      "name" : "random",
+      "id" : "786005207262953563",
+      "path" : "Pharo/random",
+      "messages" : []
+    }
+  ]
+}

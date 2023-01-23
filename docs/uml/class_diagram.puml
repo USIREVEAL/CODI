@@ -1,0 +1,156 @@
+@startuml
+
+skinparam groupInheritance 2
+
+
+class Attachment {
+  - url : String
+  - message : Message
+  + deserialize() : Attachment
+  + retrieve() : Attachment[]
+}
+
+class Author {
+  - messages : Message[]
+  + deserialize() : Author
+}
+
+class Channel {
+  - path : String
+  - community : Community
+  - topics : Topic[]
+  - messages: Message[]
+  + deserialize() : Channel
+}
+
+class ChannelMention {
+  - channel : Channel
+  + deserialize() : ChannelMention
+  + retrieve() : ChannelMention[]
+}
+
+class Code {
+  - code : String
+  + deserialize() : Code
+  + retrieve() : Code[]
+}
+
+class Community {
+  - name : String
+  - members : Member[]
+  - authors : Author[]
+  - channels : Channel[]
+  + deserialize() : Community
+}
+
+class Content {
+  - start_position : int
+  - end_position : int
+  - message : Message
+  + deserialize() : Content
+}
+
+class Conversation {
+  - messages : Message[]
+}
+
+class Emoji {
+  - unicode : String
+  + deserialize() : Emoji
+  + retrieve() : Emoji[]
+}
+
+class Entity {
+  - uuid : String
+  + deserialize() : Entity
+}
+
+class Link {
+  - url : String
+  + deserialize() : Link
+  + retrieve() : Link[]
+}
+
+class Member {
+  - username : String
+  - community : Community
+  + deserialize() : Member
+}
+
+class MemberMention {
+  - member : Member
+  + deserialize() : MemberMention
+  + retrieve() : MemberMention[]
+}
+
+class Mention {
+  + deserialize() : Mention
+}
+
+class Message {
+  - timestamp : Date
+  - author : Author
+  - channel : Channel
+  - processable_text : String
+  - contents : Content[]
+  - attachments : Attachment[]
+  + deserialize() : Message
+}
+
+class Multimedia {
+  - url : String
+  + deserialize() : Multimedia
+  + retrieve() : Multimedia[]
+}
+
+class SpecialMention
+
+class Text {
+  - text : String
+  + deserialize() : Text
+  + retrieve() : Text[]
+}
+
+class Topic {
+  - description : String
+  - channel : Channel
+  - keywords : String[]
+  + deserialize() : Topic
+}
+
+
+Member "0..*" -- "1" Community
+Channel "0..*" -- "1" Community
+
+Entity <|-down- Member
+Entity <|-down- Message
+Entity <|-down- Channel
+Entity <|-down- Community
+Entity <|-down- Conversation
+
+Member <|-down- Author
+
+Message "1" -down- "1..*" Content
+Message "1..*" -down- "1" Author
+Message "1" -down- "0..*" Attachment
+Channel "1" -right- "0..*" Message
+Channel "1..*" -down- "0..*" Topic
+Channel -up[hidden]- Community
+Conversation -left[hidden]- Member
+Conversation "1" -- "1..*" Message
+
+Content <|-down- Code
+Content <|-down- Link
+Content <|-down- Text
+Content <|-down- Emoji
+Content <|-down- Mention
+Content <|-down- Multimedia
+
+Mention <|-down- MemberMention
+Mention <|-down- SpecialMention
+Mention <|-down- ChannelMention
+
+Member "1" -- "0..*" MemberMention
+ChannelMention "0..*" -- "1" Channel
+
+@enduml

@@ -1,0 +1,464 @@
+T1 0 Kyro :  stm is really cool
+T1 104318 Kyro :  is this server dead?
+T1 104384 Othello :  Not really?
+T1 104386 Othello :  But kinda
+T1 104401 Othello :  There's a few of us here who like to answer questions like me djeis and a few others.
+T1 591064 Khylon :  And some of us looking for help on projects 🙂
+T2 1748270 Nikhil :  Are efforts to make Clojure (on JVM) a viable development platform for Android abandoned?
+T1 1766776 Othello :  I think for the most part people have moved on to doing cljs via ReactNative for android development. I haven't seen any recent updates to the clojure on android project.
+T1 1766962 Othello :  Although it looks like leindroid should still work even with the latest clojure versions. You just have to determine if the startup time that it provides is fast enough for you.
+T1 1767123 Othello :  Specifically though if you want to do clojure development on mobile I recommend https://expo.io/
+T1 1767172 Othello :  It's a platform which provides a way to use reactnative for everything without having to write any native code either for android or ios.
+T1 1767172 Othello :  https://docs.expo.io/versions/latest/guides/usingclojurescript/
+T3 1826072 Nikhil :  Ooh interesting.
+T1 1925566 Khylon :  Expo is cool but just understand there are tradeoffs with that kind of software.
+T3 1960431 Ilidio :  renatal is greatshadow cljs is getting great too
+T4 2416085 Arlet :  Hey i was just wondering if anyone could help me i have a sequence of `'(1 2 3 4 5)`And im wanting to find out the index of 5.for example in this case the result would be 4.Is there anything built into clojure to solve this?
+T4 2416589 Rovin :  `(.indexOf (1 2 3 4 5) 5)`
+T4 2416606 Rovin :  None
+T4 2418034 Othello :  That works but if you want a lazy sequence of the indices of all matches you could do the following:`(map first (filter #(= 5 (second %)) (mapindexed vector (1 2 3 4 5))))`
+T4 2429916 Arlet :  🤦\u200d♂️ Thanks guys
+T5 2494039 Marlen :  hey guys i want to add two lists as argument:user=> (defn share [a b] (a b))but if i call it i get:user=> (share  #_=> [1 2] [1 2])Execution error (IllegalArgumentException) at user/share (REPL:1).Key must be integer
+T5 2494103 Marlen :  None
+T5 2494127 Marlen :  anyone any idea what im doing wrong here?
+T5 2494138 Marlen :  can't i just pass two lists?
+T5 2494187 Marlen :  is there something special about passing lists in clojure?
+T5 2497277 Marlen :  i think i got it i have to give list return type
+T6 2512463 Emani :  What are you trying to do exactly?
+T6 2512499 Emani :  When you call `(a b)` you're calling `([1 2] [1 2])` which kinda doesn't work
+T6 2512540 Emani :  If you were to call `([1 2] 0)` you'd get the 0th item since vectors can be called as functions provided their argument is an index
+T6 2555808 Marlen :  @lsenjov i want to write a program that takes a list of 8 elements and shares assign each two elements on a new list
+T6 2555833 Emani :  Shares assign?
+T6 2555869 Emani :  Can you give an example of input and output?
+T6 2555959 Emani :  Are you talking like `(share [1 2 3 4 5 6 7 8]) ; [[1 2] [3 4] [5 6] [7 8]]`?
+T6 2556016 Marlen :  @lsenjov exactly it should be card game and i have shuffled now 4 people get each two cards
+T6 2556033 Emani :  Oh I see
+T6 2556049 Emani :  Right so you've got some options
+T6 2556058 Emani :  Gimme a tic
+T6 2556086 Emani :  You can use `(partition 2 coll)`
+T6 2556091 Emani :  http://clojuredocs.org/clojure.core/partition
+T6 2556146 Marlen :  nice thank you @lsenjov
+T7 2577267 Marlen :  so new this functional approach i need to adapt my thinking. does anyone know a good introduction to thinking in a functional style?
+T8 2578515 Khylon :  There's always the classic Are We There Yet? https://www.youtube.com/watch?v=E4RarTAZ2AY for the philosophical side
+T8 2578552 Khylon :  https://www.cs.kent.ac.uk/people/staff/dat/miranda/whyfp90.pdf is a solid paper for why FP
+T8 2578610 Khylon :  https://www.youtube.com/watch?v=P76Vbsk_3J0 is helpful if you know Java
+T8 2578616 Marlen :  @WhoNeedszZz thanks i love rich hickeys talks they are addicting
+T8 2578621 Khylon :  Very!
+T8 2578643 Khylon :  https://www.braveclojure.com/ is a fantastic read and humorous to keep it interesting
+T8 2578731 Khylon :  It's difficult to explain how to think in it on a general level so I've found it most helpful to look at those kind of resources and then just practice using it until the coin drops
+T8 2578742 Khylon :  Make note of the aha moments
+T8 2578789 Khylon :  Rich gives a fantastic explanation in the first talk I posted though
+T8 2578823 Marlen :  already watching thanks 🙂
+T8 2578835 Khylon :  Right around the 30m mark
+T8 2578897 Khylon :  https://www.youtube.com/watch?v=f84n5oFoZBc is also really helpful and I think often overlooked
+T8 2578912 Khylon :  Design phase is critical
+T8 2579000 Marlen :  thanks @WhoNeedszZz
+T9 2675172 Marlen :  is conj short for conjure?
+T9 2675463 Haley :  Conjoin I think.
+T9 2676926 Marlen :  guys i am partioning cards in a small game in clojure. is it fine to just rename the output like this
+T9 2676929 Marlen :  None
+T9 2677042 Marlen :  i am basically giving first two cards to p1 and then the next cards to player 2. after i do this the first time i overwrite players with the changed data. is that perfectly fine to do?
+T9 2677087 Marlen :  i hope this question does not sound strange but functional thinking is not so familiar
+T9 2677997 Marlen :  i was thinking i can put the result directly in the function
+T9 2687113 Marlen :  anyone any idea what my error is:
+T9 2687143 Marlen :  i want to return {:p1 1} in that function
+T9 2687283 Emani :  Remove the outer parens
+T9 2687318 Emani :  Wait hold on
+T9 2687328 Emani :  You're just wanting something that returns what's given to it?
+T9 2687343 Emani :  But in general remember that parens have different meaning than other languages
+T9 2687351 Emani :  Parens actually _do something_ in lisps
+T9 2687381 Emani :  It's trying to evaluate `{hi 1}` as a function not just return `{hi 1}`
+T9 2687396 Emani :  Wait I was right just remove the outer parens
+T9 2687775 Marlen :  None
+T9 2687845 Marlen :  nice @lsenjov  that worked
+T9 2687870 Marlen :  i forgot ( is evaluating
+T9 2687902 Marlen :  some small pitfalls i have to get used to
+T9 2688428 Marlen :  is there a way to map a function with two arguments:
+T9 2688439 Marlen :  like this?
+T9 2688600 Emani :  Yes but remember your expansion
+T9 2688621 Emani :  That goes to `[(+ [1 2]) (+ [3 4])]`
+T10 2688641 Emani :  What do you want it to look like?
+T9 2688655 Emani :  (Also remember that `partial` and `apply` are functions)
+T9 2694124 Marlen :  None
+T9 2694147 Marlen :  i am getting an error if i type this
+T9 2694271 Marlen :  okay i will think about it thanks @lsenjov
+T11 2694684 Yaniel :  what is your desired output from your map call?
+T11 2695383 Yaniel :  The essence of what's happening there is that your parameter is a vector with two vectors in it so like lsenjov said that expansion is trying to make two calls to `+` each with one parameter of a vector and Clojure doesn't know how to add one vector e.g. `(+ [1 2])` doesn't really make sense (you probably want `(+ 1 2)`). So you could map `apply +` if you want to add the contents of each vector separately.
+T11 2695910 Yaniel :  to your question about multiple arguments map has a form that takes more than one collection and it will call the function with the first element of each collection then the second element of each collection then the third element and so on until one of the collections is empty
+T11 2696344 Yaniel :  for example:the `vector` function creates a vector of its arguments__BLOCKREMOVED__
+T9 2742842 Marlen :  yes @SlashDevSlashRandom thanks you both i get it
+T9 2742845 Marlen :  None
+T9 2744945 Khylon :  @david_node Just a heads up Discord supports code blocks with Clojure syntax highlighting (on desktop). Surround the code with two sets of 3 backticks and clojure after the first set
+T9 2843041 Marlen :  i started out with rich hickeys talks and i thought that his thoughts are so profound that i wanted to hear everything he has to say. some things i do not seem to grasp yet but it's these moments where you found someone who is thinking so different (than everybody else) and yet his arguments make sense. It's like discovering a new world which was there the whole time but you missed it because you simply did know it.I have this feeling that this is the language i learnt the fastest ever. the syntax and semantics are insanely easy. I just need to get familiar with basic functions and wrap my head around the functional way of thinking but this is insane. where are the downsides to this? can anyone relate to this?
+T12 2843132 Emani :  Downsides?
+T12 2843133 Emani :  Okay
+T12 2843143 Emani :  So one it's hard for a lot of people to learn
+T12 2843159 Emani :  Clojure is very opinionated and breaking years of programming habits are hard
+T12 2843165 Emani :  Two lisp syntax scares people
+T12 2843189 Emani :  Three tooling is excellent but takes some time to get used to
+T12 2843201 Emani :  Repl driven development is fucking weird compared to the norm
+T12 2843224 Emani :  Four it really needs spec 2 to get finished so people can start properly building tooling for it
+T12 2843261 Emani :  The lack of saying it has a stable type system is a hard sell for a lot of people
+T12 2843302 Emani :  (Yes spec isn\'t a static type system but it needs to be stable so we can say hey look this is how you use the official thing and why it doesn\'t need to be static")
+T12 2843339 Emani :  Five it's pretty fast but you can't really use it for anything needing blistering performance
+T12 2843367 Emani :  So it's never going to be championed by the googles of the world where a 1% performance improvement is millions in yearly savings
+T12 2843394 Emani :  Six lisp syntax scares people (seriously this is one of the biggest factors)
+T12 2843428 Emani :  That's off the top of my head
+T12 2843442 Emani :  Also while there's very little syntax there's a surprising number of reader macros that confuse readers
+T12 2843538 Emani :  Especially when dealing with cljc files
+T12 2843558 Emani :  Every time someone sees `#?@` it scares them a lot
+T12 2843903 Marlen :  thanks for elaborating on this @lsenjov  i really need to dig in more and check out what #?@ means. syntax is just the simplest i have ever encountered compared to other languages i think it is just a bit bewildering in the beginning.
+T12 2843922 Emani :  👍
+T12 2843942 Emani :  `#?` and `#?@` are used in .cljc files
+T12 2843959 Emani :  .cljc files compile to both clojure and clojurescript
+T12 2843982 Emani :  And those reader conditionals are for doing platform specific code
+T12 2843987 Emani :  Especially interop
+T12 2844006 Emani :  Your `Integer/parseInt` won't work on the javascript side for instance
+T9 2844249 Marlen :  why cant you say that it is a stable system?
+T12 2844292 Emani :  Because `Integer/parseInt` is specifically a Java call
+T12 2844312 Emani :  The js side is `js/parseInt`
+T12 2844346 Emani :  But `#?` allows you to specify how to parse an int on both platforms and use it interchangeably
+T12 2844360 Emani :  Well there's a little more to it but that's why the reader conditional exists
+T12 2844388 Marlen :  and that makes the system not stable". i dont understand
+T12 2844410 Emani :  Wait what?
+T12 2844417 Emani :  What do you mean not stable"?
+T12 2844436 Marlen :  you said \'The lack of saying it has a stable type system is a hard sell for a lot of people\
+T12 2844439 Emani :  Oh right type system
+T12 2844441 Emani :  Okay
+T12 2844451 Marlen :  type system
+T12 2844453 Emani :  So one thing that's been hard to sell to people is the dynamic nature
+T12 2844453 Marlen :  oh sorry
+T12 2844464 Emani :  And spec/spec2 are still in alpha
+T12 2844470 Marlen :  yes got it 🙂
+T12 2844485 Marlen :  will look into spec
+T12 2844487 Emani :  So while I'm using spec at the moment I can't say it's fully ready
+T12 2844706 Marlen :  spec is the static type checker for clojure?
+T12 2844996 Emani :  No it's not static
+T12 2845012 Emani :  There's core.typed which is static but I don't know how much it's used
+T12 2845049 Emani :  It's more that spec is the officially condoned way of checking data and it's not stable
+T12 2845060 Emani :  It raises eyebrows when my requires have `clojure.spec.alpha` in them
+T13 2846735 Marlen :  i see i need to look into it
+T14 2861488 Khylon :  > So one it's hard for a lot of people to learn@lsenjov I don't agree with this. I would say the functional mindset is difficult for some to grasp but the language itself is one of the easiest languages to learn
+T14 2861577 Khylon :  > Five it's pretty fast but you can't really use it for anything needing blistering performance@lsenjov Don't agree with this either
+T14 2861621 Khylon :  Poor performance in Clojure is a design or implementation failure not a failure of the language
+T14 2861631 Khylon :  Android uses Java
+T14 2861705 Khylon :  In fact I don't consider any of those things you said as downsides of the language but downsides of the people trying to learn it
+T14 2861910 Khylon :  Regarding spec sure it could be a bit more fleshed out toolwise but I haven't seen glaring issues regarding itself. Again I think you're just highlighting the many flaws in the ways many programmers do things that are in a completely different mindset and thus seem foreign to them. To me this is obvious and logical. When you're learning a foreign language do you not have the same struggles?
+T14 2861950 Emani :  blistering meaning things like high end game Dev and other things where you need to squeeze out performance
+T14 2861981 Emani :  There's also a lot of programmers who can't unlearn previous things which is why it's hard for them to learn
+T14 2861990 Khylon :  That's a failure of the person not the language
+T14 2862017 Khylon :  And to your first statement well yeah. You don't use any general purpose language for a specific task like that
+T14 2862020 Emani :  I know but these _are_ drawbacks when trying to use it commercially
+T14 2862021 Khylon :  So it's not really in scope
+T14 2862043 Khylon :  that depends on your hiring practices
+T14 2862046 Emani :  Trying to actually find/hire clojure devs is painful
+T14 2862060 Khylon :  Says whom?
+T14 2862064 Emani :  Because they don't exactly fall from trees
+T14 2862077 Emani :  Us trying to find Aus based clojure devs
+T14 2862091 Khylon :  Of course not. Highly skilled people of any trade are difficult to find
+T14 2862127 Emani :  I could have a dozen bites for a Ruby or Java dev in a week
+T14 2862139 Khylon :  Yeah and you get what you pay for too
+T14 2862158 Khylon :  Highly skilled programmers aren't looking for low ball offers
+T14 2862159 Emani :  Look I agree with you on all these points
+T14 2862170 Emani :  But these are still drawbacks to adoption
+T14 2862191 Khylon :  Well to be fair he asked what are the drawbacks of the language itself not specifically to commercial adoption
+T14 2862209 Khylon :  I understood his question to mean from a general learning pov
+T14 2862226 Khylon :  @david_node Is that accurate?
+T14 2862235 Emani :  These are pain points I've been hitting recently so they're fresh in mind
+T14 2862246 Marlen :  @WhoNeedszZz exactly
+T14 2862262 Khylon :  Ok thought so
+T14 2862299 Khylon :  So yeah I totally understand your frustration @lsenjov. That's why I can't find work here in the US and had to start my own company. All I got were low ball offers that never work out
+T14 2862335 Marlen :  what does low ball mean?
+T14 2862346 Emani :  Low pay
+T14 2862349 Khylon :  Low salary to your skill level
+T14 2862373 Khylon :  Like offering you $40k when you're worth 6 figures
+T14 2862405 Marlen :  but also the commercial side is an interesting point as well
+T14 2862411 Khylon :  It is
+T14 2862413 Khylon :  And it sucks
+T14 2862516 Khylon :  I can't speak to hiring practices in Australia but I know very well how it is in the US. They want to give you low pay give them !20% do multiple roles but not be too good to where you outshine your peers.
+T14 2862532 Khylon :  It's totally insane
+T14 2862582 Khylon :  But if you give them 90100% to avoid the last bit they complain and say they know you can do better
+T14 2862586 Khylon :  Catch22 all of the way
+T14 2862696 Marlen :  sounds a bit contradicting. interesting you say language is easy to learn as well but that functional programming part is hard.
+T14 2862723 Marlen :  that is exactly how i experience it
+T14 2862785 Marlen :  i have started writing a program and started mutating data with def just because my mind is so used to do so
+T14 2862860 Marlen :  it just a complete different way of thinking but with exercise i think the coin will toss
+T14 2862884 Khylon :  It sounds contradicting but it depends on your previous exposure. If you've never learned a functional language then any functional language will give you doubletakes. But if you've been exposed to the functional paradigm before it is trivial to learn Clojure
+T14 2862907 Khylon :  I had the luxury of being exposed to it previously in my personal and Comp Sci studies
+T14 2862925 Khylon :  I also had a professor that prefers the functional paradigm and taught Java using closures
+T14 2862935 Khylon :  It made it much easier to grasp
+T14 2862949 Khylon :  And our code had very few errors in it to boot
+T14 2862986 Khylon :  And this was before Java officially supported closures
+T14 2862990 Marlen :  nice seems like your professor was on a good path
+T14 2863000 Khylon :  Definitely
+T14 2863007 Khylon :  He's a Haskell guy
+T14 2863033 Marlen :  oh okay yeah makes sense then 😄
+T14 2863052 Khylon :  You want hard language to learn? That's the one
+T14 2863072 Emani :  Australia's a mixed bag like most places but there's definitely a culture of avoiding burnout in most places I hear of
+T14 2863073 Marlen :  😄
+T14 2863081 Khylon :  But I have to say I actually enjoyed it being written as math
+T14 2863106 Emani :  Mainly because good programmers are in short supply and hiring is expensive so they do their best to not lose people
+T14 2863119 Khylon :  The opposite in the US
+T14 2863125 Khylon :  Burnout all day every day
+T14 2863136 Khylon :  Massive turnover rates
+T14 2863175 Khylon :  I often find a large part of it being some idiot director that knows nothing about programming calling the shots
+T14 2863204 Khylon :  And leads that haven\'t programmed in 20 years
+T14 2863218 Khylon :  True story
+T14 2863324 Marlen :  i think it's worth trying to learn the functional paradigm. even if i will not work with clojure i can adapt it in other languages
+T14 2863376 Khylon :  In one of my positions we had discussed at length why we shouldn't use Redux unless the task absolutely demanded it. Whole team agreed including the lead that hadn't programmed in 20 years. Few weeks in to the project  we're using Redux now. What changed? Nothing. So why are we using it given everything we talked about? Because I said so.
+T14 2863392 Khylon :  And not a single person on the team had used it before
+T14 2863443 Khylon :  Do you think the project got finished?
+T14 2863507 Marlen :  i guess not
+T14 2863530 Khylon :  > i think it's worth trying to learn the functional paradigm. even if i will not work with clojure i can adapt it in other languages@david_node You can absolutely use it in imperative languages. I would argue you write much more efficient and less errorprone code that way
+T14 2863550 Khylon :  Java with closures perfect example
+T14 2863574 Khylon :  But I think if you just stick with it you'll be successful
+T14 2863591 Khylon :  Most people that shit on functional languages gave up
+T14 2863597 Marlen :  i am thinking of python using immutable data
+T14 2863612 Khylon :  That would work. Python is a hybrid language anyway
+T14 2863618 Khylon :  You don't have to use classes at all
+T14 2863636 Khylon :  When I used Python I did exactly that
+T14 2863695 Marlen :  nice nice but sticking to clojure first is to get some discipline
+T14 2863696 Khylon :  What did you think of the OOP fallacy presented in Are We There Yet?
+T14 2863708 Marlen :  just loved it
+T14 2863721 Khylon :  I show that to anyone that praises OOP
+T14 2863724 Khylon :  And laugh
+T14 2863726 Marlen :  😄
+T14 2863752 Khylon :  Entire class of errors gone by using functional mindset
+T14 2863756 Marlen :  i just love that we got the modeling of our world wrong
+T14 2863761 Khylon :  ikr
+T14 2863801 Khylon :  I thought this did a great job of explaining the pitfalls of Microservices: https://www.youtube.com/watch?v=BThkk5zv0DE
+T14 2863810 Khylon :  I would love to work for Derek
+T14 2863939 Marlen :  in a way rich hickey really went back to a very abstract level in order figure where the his problems were caused by and that is sooo damn genius
+T14 2863954 Khylon :  That's how to do it
+T14 2863972 Khylon :  If your tool doesn't allow you to do what you need use another tool
+T14 2863976 Khylon :  Tool doesn't exist? Make it
+T14 2863984 Marlen :  😄
+T14 2863993 Marlen :  true
+T14 2864001 Khylon :  We have too many programmers that wait for other people to make the change
+T14 2864013 Khylon :  Sheep mentality
+T14 2864064 Marlen :  i have seen that LISP is used in quantum computer programming
+T14 2864093 Marlen :  clojure could as well take that spot probably
+T14 2864100 Khylon :  I believe so
+T14 2864112 Khylon :  I think Clojure has much more potential than what people are using it for
+T14 2864162 Khylon :  I used ClojureScript + reframe (+ reagent) and made a React site that performs better than a JS React site done the same way
+T14 2864196 Khylon :  Yet ClojureScript turns into vanilla JS
+T14 2864256 Marlen :  wow that is awesome. for me clojurescript is just another nice language feature.
+T14 2864296 Marlen :  since it is there it could open many doors
+T14 2864329 Marlen :  i wonder if clojure will be the python of ten years before
+T14 2864364 Khylon :  That's the beauty of it. Clojure results in plain Java ClojureScript results in plain JS. That's why I don't really understand the feet dragging for commercial adoption. You don't have to redo your whole codebase. You can just write new things in it and go back and migrate when you have the time
+T15 2864550 Haley :  Well there are still some integration issues just adding clojure into an existing java codebase.
+T14 2864572 Haley :  But there are a lot of cases where you can do that yea.
+T14 2864578 Marlen :  way is practically laid out for people to go but they won't because it seems too risky probably and you dont want to be dependent on a bunch of clojure developers. where will you get them from?
+T14 2864591 Haley :  🤷\u200d♂️ slow and steady expansion
+T14 2864604 Khylon :  People are afraid of risk
+T14 2864615 Khylon :  Even though they do risky things on a daily basis
+T14 2864618 Haley :  A few people screaming at the top of their lungs that it's awesome a lot more being reasonable and friendly.
+T14 2864650 Khylon :  Huh?
+T15 2864681 Haley :  Me?
+T14 2864685 Khylon :  Yes
+T14 2864688 Khylon :  Not sure what you meant there
+T14 2864705 Khylon :  Why is being vocal about it being great unreasonable?
+T14 2864706 Haley :  Was explaining how we get the developer base to actually change the industry.
+T14 2864711 Haley :  Oh.
+T14 2864744 Khylon :  Developers have very little ability to influence the higher ups
+T14 2864747 Haley :  I said screaming for a reason.
+T14 2864761 Haley :  And I'm not saying having those people in the community is a bad thing.
+T14 2864769 Haley :  They get the word out.
+T14 2864775 Khylon :  Who is screaming though?
+T14 2864780 Haley :  But people that are that loud have a tendancy to also be uncompromising.
+T14 2864780 Khylon :  I haven't seen these people
+T14 2864803 Haley :  I've run into a few. Heck I've been one of them from time to time.
+T14 2864816 Khylon :  Where though?
+T14 2864826 Haley :  Online mostly.
+T14 2864836 Khylon :  Certainly not here
+T14 2864842 Haley :  Oh no not on this discord.
+T14 2864856 Khylon :  Maybe in the Slack but I couldn't keep up with it to really notice
+T14 2864875 Khylon :  And I ignore Reddit
+T14 2864878 Haley :  It's not the sort of thing you'd see in an actual clojure community no point preaching to the choir.
+T14 2864885 Khylon :  True
+T14 2864892 Khylon :  Except on Reddit
+T14 2864896 Haley :  True lol
+T14 2864898 Khylon :  Reddit is a cesspool
+T14 2864917 Khylon :  You want to get downvoted for saying something easily verifiable? Post on Reddit
+T14 2865514 Marlen :  😄
+T16 2870699 Marlen :  i thought filter and map were important but now i think it reduce is really key
+T14 2870719 Marlen :  for composition
+T14 2870722 Khylon :  They are all useful
+T16 3024663 Marlen :  i just realized that i am actually executing function after function after function.
+T14 3024682 Marlen :  so strange
+T16 3026451 Yaniel :  well in a really abstract way most languages can be thought of as a bunch of function calls but in a language like Clojure you primarily just have values and functions so if you're going to execute something it's gonna be a function :)
+T17 3026782 Colten :  Hi all! How would you import a library like this https://github.com/lambdaisland/trikl using leiningen? It's made with deps.edn not on clojars...
+T17 3029261 Yaniel :  Not to be superpedantic but that's sort of not a library in the sense that it doesn't appear to be packaged for distribution. You could clone that repo build it and deploy it to a local maven repo or you could create some version of a checkout dependency (<https://github.com/technomancy/leiningen/blob/master/doc/TUTORIAL.md#checkoutdependencies>)
+T17 3029280 Yaniel :  those are the ideas that come to mind off the top of my head
+T17 3034366 Colten :  @SlashDevSlashRandom I agree with you looks like it doesn't want to be used xD... anyway thanks for the tips!
+T17 3034596 Othello :  leiningen plugins also provide ways to use gitbased dependencies
+T17 3034612 Othello :  Also clj deps are designed to be used from git
+T17 3034641 Othello :  I'd definitely say a readme that full wants to be used though
+T17 3034690 Colten :  > Also clj deps are designed to be used from git@srasu oh i didn't know that
+T17 3034777 Othello :  Yes so for a long time the cljnew tool for the tools.deps ecosystem was done entirely out of git.
+T17 3034977 Colten :  nice! I'll read about that and try it out... thanks!
+T18 3035895 Marlen :  @SlashDevSlashRandom yes you are right
+T18 3036825 Colten :  @srasu @SlashDevSlashRandom creating a project with a deps.edn with dependency on the git repo worked... I guess that's the way it was meant to be then... tried some plugins for leiningen but none of them worked (because trikl it's not using leiningen i believe).... But I found https://jitpack.io/ which seems simple to use could be useful someday.. thank you all!
+T17 3036917 Othello :  Leiningen plugins require using leiningen yeah unfortunately they aren't crosscompatible with the deps.edn ecosystem. If you really need git dependencies and leinengen plugins try this one: https://github.com/reifyhealth/leingitdown
+T17 3037726 Colten :  it worked with leingitdown too! cool! =D__BLOCKREMOVED__
+T19 3051362 Khylon :  > Not to be superpedantic but that's sort of not a library in the sense that it doesn't appear to be packaged for distribution. You could clone that repo build it and deploy it to a local maven repo or you could create some version of a checkout dependency (<https://github.com/technomancy/leiningen/blob/master/doc/TUTORIAL.md#checkoutdependencies>)@SlashDevSlashRandom To be totally pedantic a library doesn't have to be easily distributable to be a library. It simply provides code for other code to consume rather than be built as an executable. 😋
+T19 3051615 Khylon :  Libraries existed long before version control existed
+T17 3092658 Colten :  I wish dependency management was easier/clearer... it may be just me but I always have problems trying to put stuff together not just clojure but in general... nowadays i'm just tired and endup not doing anything 😛
+T17 3092666 Colten :  but I'm glad I asked... learned something new haha
+T17 3092742 Colten :  though I understand it's a hard problem to solve definitively... i don't know...
+T17 3093279 Othello :  Yeah dependency management was part of what the clojure commandline tools are supposed to help resolve.
+T17 3093678 Colten :  i think it helps... but when things go wrong i get lost 😛 i'll study a bit more about java dependencies in general leiningen and deps.edn to see what i find
+T20 3102335 Khylon :  @blahblubliblu https://research.swtch.com/deps
+T20 3102346 Khylon :  We're up shits creek without a paddle when it comes to deps
+T20 3102532 Khylon :  That article explains the issues very clearly
+T20 3102568 Khylon :  And you always have Rich to say the same thing: https://www.youtube.com/watch?v=oytL881pnQ
+T20 3102590 Khylon :  Can't remember where exactly in that talk he mentions it but he does
+T20 3103080 Colten :  I remember Rich talking about semantic versioning not sure if it's in this talk
+T20 3103145 Colten :  i'll give the article a read thanks!
+T20 3104063 Khylon :  They both talk about the shift in responsibility. With an inhouse library YOU are responsible for fixing it and have the ability to do it. With a 3rd party library it is their responsibility and the only way you can fix it would be to fork it but you don't have that intimate understanding of the library's design and function. So you have to wait for them to fix it.
+T20 3104162 Khylon :  And if you did fork it now you have a bad situation because there is a divergence and massive overhead when it comes to it changing later on
+T21 3106659 Colten :  so true
+T21 3106784 Colten :  nice article will keep some ideas in mind for next time 🙂
+T22 3212470 Yaniel :  @WhoNeedszZz ... hence the sort of
+T23 3279638 Gayatri :  anyone think they would be interested in explaining a program to me for 15$ an hour? this is a one time little gig
+T24 3787356 Aryss :  Does anyone here have experience setting up luminus behind an nginx reverse proxy?
+T24 3787391 Marielena :  they have great docs for that if I remember correctly
+T24 3787419 Marielena :  https://luminusweb.com/docs/deployment.html#fronting_with_nginxhttps://luminusweb.com/docs/deployment.html#fronting_with_nginx
+T24 3787442 Aryss :  Not for my particular issue unfortunately. I am trying to set it up under a location apart from root
+T24 3787541 Aryss :  I am having difficulty configuring luminus/jetty to use that path to properly handle links relative to that path
+T24 3787559 Marielena :  I think that's a nginx issue then
+T24 3788710 Aryss :  I'm not so sure. For example suppose I am trying to proxy pass everything under `mysite.com/util/` to the running luminus web app. If luminus has no knowledge of the `/util/` prefix all absolute paths will improperly go to `mysite.com/`.
+T25 3794271 Khylon :  Docroot configuration is definitely in the Nginx config
+T25 3794368 Khylon :  Oh I see. You need to use subdomains instead of path.
+T25 3794377 Khylon :  `util.mysite.com`
+T24 3796259 Aryss :  I determined a workaround by just modifying the `<project>.layout/render` function that comes with the luminus template to the following:__BLOCKREMOVED__Then all templates are able to generate links properly by just referencing the `pathprefix` and script/style Selmer tags continue to work as well. Just need to set `PATH_PREFIX` as an environment variable to match the path setup in nginx.
+T26 3816809 Niall :  Does anybody see a reason why `(map #(loadmap %) data` isn\'t getting called here?__BLOCKREMOVED__
+T26 3816929 Emani :  For the sake of it wrap that map in a `doall`
+T27 3817544 Niall :  the one calling loadmap?
+T26 3817917 Emani :  `(doall (map #(loadmap %) data))`
+T26 3817943 Emani :  Otherwise what's it actually returning?
+T26 3817970 Emani :  If you call `(loadmaps test.edn")` what\'s the return?
+T26 3818354 Niall :  Here\'s the content of loadmap. __BLOCKREMOVED__
+T26 3818370 Niall :  So even that first log/debug is never running
+T26 3818376 Niall :  Trying the doall rn
+T26 3818474 Niall :  Looks like that worked
+T26 3818613 Niall :  So since loadmap is primarily side effects it's not fully realized unless wrapped in a doall?
+T26 3829744 Emani :  Unless you're observing it directly then yes it won't realise any of it
+T28 3865633 Jaionna :  hello everyone can someone help me I have a lein project as a module of a larger maven projet (using lein pom) does anyone know I can configure building via maven?
+T28 3865655 Jaionna :  for that lein project
+T29 3948797 Othello :  Anybody around with a lot of async experience? I'm getting what I consider strange behavior where after calling shutdownagents my program still won't exit and seems to have nondaemon threads going on. It has a lot of core.async go blocks and agent usage but nothing too weird.
+T29 3950694 Aryss :  @srasu I do not think that `shutdownagents` has any effect on threads/threadpools that are created from clojure.core.async (`thread`/`go`). I believe that it only interacts with the Agent subsystem of clojure.core (`agent` `send` and `sendoff`).
+T29 3950781 Othello :  Then I'm definitely curious because I've never had issues shutting down applications with live goloops before.
+T29 3950925 Aryss :  Do you have any blocking/IO actions going on in your go processes?
+T29 3951074 Othello :  Just waiting on channels.
+T29 3951077 Othello :  so parking
+T29 3951182 Aryss :  Try closing all of your channels instead. That will allow your go blocks to terminate
+T29 3951239 Othello :  That... would be a challenge. Might be possible but we'll see.
+T29 3951316 Othello :  Wait nevermind. That's weird.
+T29 3951392 Othello :  Actually it looks like I exit the go block.
+T29 3951777 Othello :  Yeah so in theory there's no go blocks running and no agents since I call shutdownagents. It's just weird.
+T29 3953358 Othello :  Turns out it was actually some dumb undocumented stuff about the websocket library I was using
+T30 3953391 Haley :  Oof
+T29 3953423 Othello :  Yeah because I was going down a layer and creating my own websocket client from jetty I had to manually call .stop on them.
+T31 3957572 Aryss :  Ouch. Not fun. Glad you got it resolved at least
+T29 3957917 Othello :  Yeah me too. Should help with people using my discord library
+T32 4794048 Ziyue :  Is there an alternative to datomic regarding functional dbs in clojure? datomic looks cool and all but only the starter kit is free and it's not open source. I haven't really looked that deeply into it but I presume it's enough for smaller and personal use cases?
+T32 4795121 Emani :  I hear a good amount about Crux haven't used it myself though
+T32 5570033 Ziyue :  There is `alt` in core.async but is there something like `and` that reads input from channels in whatever order it comes in?
+T32 5570111 Ziyue :  For example I have channel one and two. I want to take something from both of them but I don't care whether one or two delivers first
+T29 5583500 Khylon :  That would be async
+T32 5583946 Ziyue :  What do you mean?
+T33 5588869 Khylon :  Your objective is asyncronous
+T32 5588900 Ziyue :  I don't understand your point
+T32 5588905 Ziyue :  Of course it's async
+T32 5588913 Ziyue :  We're talking about core.async after all
+T32 5589000 Ziyue :  Building the logic of `and` is possible with the existing macros/functions but I was wondering whether something like this already exists
+T32 5589034 Haley :  I actually wrote something that does that a few days ago cus I couldn't find a solution in core.async.
+T32 5589044 Haley :  But I might have missed something.
+T33 5589654 Khylon :  What's the issue with using `or`?
+T32 5590592 Ziyue :  What `or`? Do you mean `alts!`?
+T32 5590619 Ziyue :  Different semantics
+T33 5590625 Ziyue :  It only waits for one
+T32 5596880 Othello :  I wish there were a good parking and in core.async by default yeah. As it is the simplest way to do it is like so:__BLOCKREMOVED__
+T32 5596925 Othello :  This spawns a new thread that blocks on taking off each channel and the return value of map is put onto a channel. That channel is parked on by the outer execution context.
+T32 5596946 Haley :  what if you're working in cljs
+T32 5596965 Haley :  Wrong channel I suppose
+T32 5596967 Othello :  good question. I'm not 100% sure.
+T32 5596984 Haley :  Short answer is you need some fairly arcane loop trickery.
+T32 5596994 Haley :  And `alts!`
+T32 5597045 Haley :  You loop on `alts!` each iteration removing the channel you just took from and passing the rest back in.
+T32 5597085 Othello :  Yeah I dislike that because it's complex and requires more thread overhead. However it doesn't require an additional thread so that can be a bonus.
+T32 5597372 Haley :  __BLOCKREMOVED__Or something like that.
+T32 5597428 Haley :  My original version was inline and collected the results slightly differently plus I don't have it on hand rn 😅
+T34 5611563 Ziyue :  > You loop on `alts!` each iteration removing the channel you just took from and passing the rest back in.@djeis that's what I'd do too
+T34 5611607 Ziyue :  It just becomes very complex especially if you add more channels
+T34 5611643 Haley :  My little code snippet there should solve it for any number of channels.
+T34 5611652 Ziyue :  Oh I see
+T34 5611659 Haley :  should
+T34 5611670 Haley :  I have not tested it I just did something similar on another project recently.
+T34 5611692 Haley :  Does one take off each channel and returns a vector of the results in the same order as the channels.
+T34 5611701 Ziyue :  I didn't know you could pass a set to alts
+T34 5611714 Haley :  Ought to take any sequence.
+T34 5611724 Haley :  If not I'll have to coerce to vector.
+T34 5611731 Haley :  But it ought to take anything seqable.
+T34 5611739 Ziyue :  Nice
+T34 5611743 Haley :  I know I've passed it seqs before.
+T34 5611757 Ziyue :  Also til goloop is a thing
+T34 5611774 Haley :  Yea just a bit shorter.
+T34 5611828 Haley :  I am perhaps unreasonably pleased with `(map res chans)` in there.
+T34 5611897 Ziyue :  But the order isn't preserved is it?
+T34 5611912 Haley :  `chans` is the passed in collection 😁
+T34 5611925 Ziyue :  Oh yeah you're right
+T34 5611989 Ziyue :  Thanks a bunch
+T34 5611993 Haley :  Sure 🙂
+T34 5612004 Haley :  Do test it 😅
+T34 5612026 Haley :  I'm pretty sure it works but I don't have anything handy to test it on atm.
+T34 5612057 Ziyue :  Will do tomorrow 👍
+T35 5626240 Othello :  I'm not sure if it'll be anything seqable since the api for vectors (nth) works on sequences but doesn't call seq on its argument.
+T35 5626251 Othello :  at least that I recall.
+T36 5696235 Ziyue :  @djeis doesn't seem to work unfortunately
+T36 5696258 Haley :  Ah wonder why...
+T36 5696263 Haley :  Can't really debug atm.
+T36 5696271 Ziyue :  I modified it slightly because alts! doesn't take a set
+T36 5696280 Ziyue :  __BLOCKREMOVED__
+T36 5696311 Ziyue :  But it never seems to receive the values you put on the input channels
+T36 5696325 Haley :  Well that's... weird...
+T36 5696384 Ziyue :  __BLOCKREMOVED__maybe you can spot a mistake
+T36 5696436 Ziyue :  so it basically parks in the doseq
+T36 5696801 Haley :  🤔
+T36 5696875 Haley :  __BLOCKREMOVED__
+T36 5696968 Haley :  All I did was add `a/` prefixes make `chans` a vector and make sure the `doseq` goes through the index/chans in parallel.
+T37 5697826 Ziyue :  OH
+T37 5697864 Ziyue :  doseq in my case runs chan1 1 chan1 2 chan1 3 and so on right?
+T37 5697927 Ziyue :  I forgot it behaves like `for` and not like `map` in that regard
+T37 5697949 Ziyue :  I'm actually stupid
+T38 5894111 Nikhil :  What would be the easiest way of validating a map? I want to make sure that the map I deserialised from JSON contains specific fields and nothing else.
+T38 5894827 Nikhil :  wait I can just `(= (keys data) [:foo ...])`
+T38 5895065 Domenec :  Or maybe use spec or Prismatic schema? Possibly overkill though.
+T38 5895183 Nikhil :  Yeah some sort of `spec` would be the way to go normally but since it's just a onetime use I figured I should look for a simpler way to do it.
+T39 5897414 Ziyue :  `(every? data [:key1 :key2 ...])`
+T39 5897419 Ziyue :  Like this perhaps?
+T39 5897431 Ziyue :  That way you allow for more tham the required keys
+T39 5897434 Ziyue :  Like spec
+T38 5899347 Nikhil :  I considered using `every?` but I want it to contain no other keys.
+T38 5899386 Nikhil :  Since I'll be saving the map somewhere and I don't want potential junk data lingering there.
+T39 5900795 Ziyue :  Well then you might use sets
+T39 5900808 Ziyue :  I think (keys) returns a set
+T40 5926112 Yaniel :  I have no context so apply this as it makes sense in your case but Rich Hickey has actually talked specifically about the point of asserting that only certain keys are in a map: <https://youtu.be/oyLBGkS5ICk?t=3258>
+T41 6011377 Imogene :  The following I do not understand. Can some one point me in the right direction please?
+T41 6011389 Imogene :  __BLOCKREMOVED__
+T41 6011416 Imogene :  I load the file direct i can use keys. Do it via another function i get an error 😦
+T41 6011635 Ziyue :  You're passing a function to keys
+T41 6011642 Ziyue :  Not what that function returns
+T41 6011662 Ziyue :  (keys (loadsecrets2)) should work
+T41 6011729 Imogene :  lol it does. I do feel silly now thats it been pointed out to me 🙂 Thank you 🙂
+T41 6011763 Emani :  All good I've been working with clojure a while and still make this mistake 😂
+T42 6098564 Nikhil :  @SlashDevSlashRandom What he says makes sense especially with regards to writing your code in accordance to the map shape you have in mind and let it grow when necessary.
+T42 6098616 Nikhil :  But I'm taking external JSON input through an HTTP API converting it to a map then inserting it to an SQL database.
+T42 6098662 Nikhil :  Otherwise I'd need to cherry pick the matching keys from the map to make a new map and discard the original data.
+T42 6098674 Nikhil :  Maybe there's a cleaner way to do this.
+T43 6113194 Yaniel :  So the usual caveat of take this FWIW and decide if it applies in your situation: `selectkeys` could do the cherrypicking for you. When I think about comparing the two approaches they feel very similar except for allowing for extra information. If we validate the translated map but it has an extra key then do we reject all the data? If I want a user\'s first and last name and I get a map that has first name last name and DOB should I just say well this isn\'t exactly first name and last name so it\'s not useful"? Alternatively I say get the first and last name from this map and write those to my DB and then if the API changes tomorrow and gives me six more fields my code doesn\'t change
+T42 6123726 Nikhil :  That makes a lot of sense. I totally forgot about `selectkeys` too.
+T42 6123744 Nikhil :  Thanks!
+T43 6124439 Yaniel :  :)
+T464 6128103 Domenec :  At times I\'ve pleasantly surprised myself by leaving unknown keys present in maps as they flow through code that isn\'t interested in those keys. It supports a kind of cough aspect oriented approach to data & code. Of course I realise that it\'s hard to persist such data in schemaoriented data stores (RDBMS\ and the like)...

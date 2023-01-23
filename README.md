@@ -1,92 +1,132 @@
-# CODI-Public
+<h1 align="center">CODI
+<hr>Conversation Disentanglement Microservice</h1>
 
+<div align="center">
 
+[//]: # (  <img src="./docs/assets/logo.svg" alt="angular-logo" width="70px" height="70px"/>)
+  <br>
+  <i><b>CODI is an accessible and user-friendly REST microservice that can automate the disambiguation
+    of a set of instant messages to form conversations by leveraging state-of-the-art machine learning algorithms.</b></i>
+</div>
 
-## Getting started
+<hr>
+<div align="center">
+  <img src="./docs/assets/codi_ui.png" alt="angular-logo" width="1600px"/>
+  <i>CODI Web User Interface: Screenshot &mdash; Messages (left) and color coded conversations (right) with predicted disentanglement (arrows).</i>
+</div>
+<hr>
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+# Requirements
+To run the webserver and correctly disentangle conversations, you will need the following:
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+- Python (v3.10)
+- (optional, see [how to compile MEGAM](#megam)) OCaml (v4.12.0)
 
-## Add your files
+# Conda environment
+This project was developed in a custom Conda environment. To recreate such an environment,
+execute the following commands:
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
-
+```sh
+conda env create -f ./environment.yml
+conda activate codi
 ```
-cd existing_repo
-git remote add origin https://gitlab.reveal.si.usi.ch/research/codi-public.git
-git branch -M main
-git push -uf origin main
+
+To deactivate and delete the environment, execute the following commands:
+
+```sh
+conda deactivate
+conda remove --name codi --all
 ```
 
-## Integrate with your tools
+# How to run
+### Django secret
+To run the webserver locally, you first need to generate a Django secret code — which can be done with the following
+command (from the root of this repository):
 
-- [ ] [Set up project integrations](https://gitlab.reveal.si.usi.ch/research/codi-public/-/settings/integrations)
+```sh
+python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'
+```
 
-## Collaborate with your team
+Once the key has been generated, create a `.env` file in the repository's root. The `.env` file must be structured as
+follows:
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+```env
+DJANGO_DEBUG=True
+DJANGO_SECRET_KEY="your-key"
+```
 
-## Test and Deploy
+### <a name="megam"></a> (optional) Compile MEGAM Max Entropy Classifier
+We include the MEGAM Max Entropy Classifier's latest version from
+[Hal Daume III](https://users.umiacs.umd.edu/~hal/megam/version0_91/).
+To compile it you can run the following commands:
 
-Use the built-in continuous integration in GitLab.
+```sh
+cd codi/api/utils/megam_0.92
+make clean
+make depend
+make
+```
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+### Run CoDi
+You can start a local instance of CoDi with the provided `run_server.sh` script:
 
-***
+```sh
+cd scripts
+chmod +x ./run_server.sh
+./run_server.sh
+```
 
-# Editing this README
+# IDE Run and Debug configurations (PyCharm)
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
+Run and debug configurations are available in the directory `.run` for users who have
+[PyCharm Professional](https://www.jetbrains.com/pycharm/).
+To use them, open this repository in PyCharm; it will automatically import the configurations for you.
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+First, navigate to the Django configuration "Run server" > **Environment** > **Environment variables**.
+Here you need to add a new environment variable with key `DJANGO_SECRET_KEY` and value `your-key`
+and an environment variable with key `DJANGO_DEBUG` and value `True` (the key is the same as the one you generated
+earlier).
 
-## Name
-Choose a self-explaining name for your project.
+The compound configuration "Run server" will compile the megam binary and run the server. If you need to run the
+server, you can use the Django configuration. "Start server".
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+# Docker image
+We also offer a Docker image. The Dockerfile and docker-compose for the image can be found in the project's root
+directory. This image can also be built using the Docker configuration "Compose" (for PyCharm Professional users).
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+Before running this configuration, ensure that you have a file named `.env.production` in the repo's root directory.
+The file needs to have the same structure as the `.env` described earlier. In this case, we recommend setting the
+`DJANGO_DEBUG` variable to `False`.
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+# Datasets for training, testing, and validation
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+`datasets` contains some example datasets (ANNOT or JSON formats) taken from previously published papers.
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+`datasets/annot/from_previous_papers` and `datasets/json/from_previous_papers` include datasets previously published in:
+ - Elsner, M., & Charniak, E. (2010). [Disentangling chat](https://direct.mit.edu/coli/article/36/3/389/2062/Disentangling-Chat). _Computational Linguistics_, 36(3), pp. 389-409, ACL, 2010.
+ - Chatterjee, P., Damevski, K., Kraft, N. A., & Pollock, L. (2020). [Software-related Slack chats with disentangled conversations](https://dl.acm.org/doi/abs/10.1145/3379597.3387493). _In Proceedings of MSR 2020 (International Conference on Mining Software Repositories)_, pp. 588-592, ACM, 2020.
+ - Subash, K. M., Kumar, L. P., Vadlamani, S. L., Chatterjee, P., & Baysal, O. (2022). [DISCO: A Dataset of Discord Chat Conversations for Software Engineering Research](https://olgabaysal.com/pdf/MuthuSubash_MSR2022_DataShowcase.pdf). _In Proceedings of MSR 2022 (International Conference on Mining Software Repositories)_, ACM, 2022.
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+# Example: how to train and disentangle (predict)
+On the Hompage of CoDi you can train the model from scratch and disentangle and visualize an example dataset:
+ 1. Check that the Train operation is selected (already selected by default)
+ 2. Select Slack as the type of platform you want to train on
+ 3. Leave all the features enabled
+ 4. Drag and drop the training set `datasets/annot/from_previous_papers/training.annot` in the page
+ 5. Wait for the operation to complete (console debug information will inform you about progress)
+ 6. When the Train operation is completed you can select a Predict operation and a Discord platform and drag and drop 
+     one of the Discord datasets to perform a disentanglement prediction
+     (e.g., `datasets/annot/from_previous_papers/clojure_Feb2020-Apr2020.annot`)
+ 7. After a successful validation (try, for example, `datasets/json/from_previous_papers/validation.json`) you can also
+     check the Statistics box for information about disentanglement performance (e.g., Accuracy, F1-score)
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+# License
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+Copyright (c) 2023 Edoardo Riggio, Marco Raglianti, Michele Lanza, REVEAL @ Software Institute - USI, Lugano, Switzerland
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+Distributed under the MIT License. See [LICENSE](LICENSE.txt) for more information.
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+# Contacts 
 
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+- REVEAL - https://reveal.si.usi.ch

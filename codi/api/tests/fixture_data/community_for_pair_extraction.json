@@ -1,0 +1,88 @@
+{
+  "platform": "discord",
+  "id": "981348383829",
+  "name" : "Pharo",
+  "members" : [
+    {
+      "nickname" : null,
+      "id" : "575214823022002177",
+      "name" : "plalevee",
+      "uniqueName" : "plalevee#7630"
+    },
+    {
+      "nickname" : null,
+      "id" : "575214823022048374",
+      "name" : "eddie",
+      "uniqueName" : "plalevee#7630"
+    }
+  ],
+  "channels" : [
+    {
+      "name": "general",
+      "id": "575214823022002177",
+      "path": "Pharo/general",
+      "messages": [
+        {
+          "authorId": "575214823022002177",
+          "id": "1",
+          "content": "hey, my christbuntu is sending me satanic messages, should i fetch an exorcist?",
+          "timestamp": "2022-02-06T23:00:00.0+00:00"
+        },
+        {
+          "authorId": "575214823022048374",
+          "id": "2",
+          "content": "<@U575214823022002177|plalevee> hmm, ubuntu seems to have a higher pitched voice now :|",
+          "timestamp": "2022-02-06T23:00:30.0+00:00"
+        },
+        {
+          "authorId": "575214823022002177",
+          "id": "3",
+          "content": "hahahah",
+          "timestamp": "2022-02-06T23:00:40.0+00:00"
+        },
+        {
+          "authorId": "575214823022002177",
+          "id": "4",
+          "content": "aah, christbuntu is great",
+          "timestamp": "2022-02-06T23:00:50.0+00:00"
+        },
+        {
+          "authorId": "575214823022002177",
+          "id": "5",
+          "content": "Hello5!",
+          "timestamp": "2022-02-06T23:01:00.0+00:00"
+        },
+        {
+          "authorId": "575214823022002177",
+          "id": "6",
+          "content": "Hello6!",
+          "timestamp": "2022-02-06T23:01:01.0+00:00"
+        },
+        {
+          "authorId": "575214823022002177",
+          "id": "7",
+          "content": "Hello7!",
+          "timestamp": "2022-02-06T23:06:00.0+00:00"
+        },
+        {
+          "authorId": "575214823022002177",
+          "id": "8",
+          "content": "Hello8!",
+          "timestamp": "2022-02-06T23:06:10.0+00:00"
+        },
+        {
+          "authorId": "575214823022002177",
+          "id": "9",
+          "content": "Hello9!",
+          "timestamp": "2022-02-06T23:06:20.0+00:00"
+        },
+        {
+          "authorId": "575214823022002177",
+          "id": "10",
+          "content": "Hello10!",
+          "timestamp": "2022-02-06T23:10:20.0+00:00"
+        }
+      ]
+    }
+  ]
+}

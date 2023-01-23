@@ -1,0 +1,28 @@
+{
+  "messages": [
+    {
+      "authorId": "861937276815409174",
+      "id": "940033847800766474",
+      "content": "This is a large message with a code block.\n```st\nnodesModel := $a to: $s.\nedges := #( #( $a $b 30 ) #( $b $s 1 ) #( $b $p 4 ) #( $b $c 30 )\n            #( $d $e 30 ) #( $d $f 20 ) #( $d $j 10 ) #( $e $a 15 )\n            #( $f $m 8 ) #( $g $h 20 ) #( $g $r 3 ) #( $i $a 14 )\n            #( $i $k 4 ) #( $i $d 3 ) #( $j $q 5 ) #( $k $l 10 )\n            #( $k $g 5 ) #( $m $n 7 ) #( $m $o 6 ) #( $n $c 5 )\n            #( $p $b 5 ) #( $q $i 4 ) ).\n\ngraph := Dictionary new.\n\nnodesModel do: [ :aNode |\n    graph at: aNode put: Set new ].\n\nedges do: [ :edge |\n    fromNode := edge first.\n    toNode := edge second.\n    (graph at: fromNode) add: toNode ].\n\ncanvas := RSCanvas new.\nnodes := RSCircle models: (nodesModel).\nnodes @ RSDraggable @ RSPopup. \ncanvas addAll: nodes.\n\nhighlightable := RSHighlightable new.\nhighlightable highlightColor: Color red.\nhighlightable withEdges.\nnodes @ highlightable.\n\nlb := RSLineBuilder line.\nlb canvas: canvas.\nlb withBorderAttachPoint.\nlb makeBidirectional.\nlb moveBehind.\nlb objects: (nodesModel).\nlb connectToAll: [ :aNumber | graph at: aNumber ].\n\nRSForceBasedLayout new charge: -300; on: nodes.\ncanvas @ RSCanvasController.\ncanvas open\n```end",
+      "timestamp": "2022-02-06T23:58:54.3+00:00"
+    },
+    {
+      "authorId": "575214823022002177",
+      "id": "939964765420273684",
+      "content": "Inline code blocks `var j = 0;`, `var k = 0;`, and `var l = 0;`",
+      "timestamp": "2022-02-06T19:24:23.777+00:00"
+    },
+    {
+      "authorId": "861937276815409174",
+      "id": "938733699669848064",
+      "content": "There are no code blocks here! `ciao",
+      "timestamp": "2022-02-03T09:52:34.83+00:00"
+    },
+    {
+      "authorId": "861937276815409174",
+      "id": "939541995662217246",
+      "content": "Does it recognize inline blocks inside of code blocks? ```st\nvar j = 0;\n`ciao`\nvar k = 0;\nvar l = 0;\n```",
+      "timestamp": "2022-02-05T15:24:27.612+00:00"
+    }
+  ]
+}

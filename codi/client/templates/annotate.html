@@ -1,0 +1,181 @@
+{% extends "base_generic.html" %}
+
+{% block head %}
+    <style>
+        #drop_zone {
+            display: flex;
+            border: 2px dashed lightgray;
+            height: 100%;
+        }
+
+        #spinner {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            height: calc(100% - 55px);
+            row-gap: 20px;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.61);
+            z-index: 1000;
+        }
+
+        #drop_zone_inner {
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            margin: auto;
+        }
+
+        #drop_zone p {
+            color: lightgray;
+            text-align: center;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid" style="position: absolute; height: calc(100% - 56px)">
+        <div class="row" id="drop" style="margin: 15px 0; height: calc(100% - 30px)">
+            <div id="drop_zone" ondrop="dropHandler(event);" ondragover="dragOverHandler(event);" ondragleave="dragLeaveHandler()">
+                <div id="drop_zone_inner">
+                    <p>Drag your JSON file here</p>
+                </div>
+            </div>
+        </div>
+
+        <div hidden class="row" id="table" style="margin: 15px 10px;">
+            <h2> Annotate your Dataset </h2>
+            <p> Here you can assign a number to each of the conversations. Conversation labels must be made up of one number only. </p>
+
+            <button type="button" class="btn btn-success" style="margin-top: 20px;" onclick="exportConvs()">Finish Annotating</button>
+
+            <table class="table" id="table">
+                <thead>
+                    <tr>
+                        <th> # </th>
+                        <th> UserId </th>
+                        <th> Message </th>
+                    </tr>
+                </thead>
+
+                <tbody> </tbody>
+            </table>
+
+            <button type="button" class="btn btn-success" style="margin-bottom: 30px;" onclick="exportConvs()">Finish Annotating</button>
+        </div>
+    </div>
+
+    <div id="spinner" hidden>
+        <div class="spinner-border text-light" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+
+        <div>Processing data...</div>
+    </div>
+
+    <script>
+        let file = null
+        let messages = null
+
+        async function dropHandler(ev) {
+            ev.preventDefault()
+
+            if (ev.dataTransfer.items.length > 1) {
+                alert('Only one file can be uploaded at a time.')
+
+                document.getElementById('drop_zone').style.borderColor = "lightgray"
+                document.querySelector('#drop_zone p').style.color = "lightgray"
+            } else if (ev.dataTransfer.items[0].getAsFile().type !== 'application/json') {
+                alert('File must be JSON.')
+
+                document.getElementById('drop_zone').style.borderColor = "lightgray"
+                document.querySelector('#drop_zone p').style.color = "lightgray"
+            } else {
+                document.getElementById('spinner').hidden = false
+
+                file = await ev.dataTransfer.items[0].getAsFile().text()
+                file = JSON.parse(file)
+
+                for (let message in file.channels[0].messages) {
+                    file.channels[0].messages[message].timestamp = new Date(file.channels[0].messages[message].timestamp)
+                }
+
+                file.channels[0].messages.sort((a, b) => {
+                    return a.timestamp - b.timestamp
+                })
+
+                document.getElementById('spinner').hidden = true
+                document.getElementById("drop").hidden = true
+                document.getElementById("table").hidden = false
+
+                for (let message in file.channels[0].messages) {
+                    document.querySelector("table > tbody").innerHTML += `
+                        <tr>
+                            <td style="color: black"> <input style="width: 80px;" id="${file.channels[0].messages[message].id}" class="conversation" class="form-control" aria-describedby="conversation" placeholder="Conv ID"> </td>
+                            <td style="color: black"> ${file.channels[0].messages[message].authorId} </td>
+                            <td style="color: black"> ${file.channels[0].messages[message].timestamp.toString()} </td>
+                            <td style="color: black"> ${file.channels[0].messages[message].content} </td>
+                        </tr>
+                    `
+                    if (file.channels[0].messages[message].conversation !== undefined && file.channels[0].messages[message].conversation !== null) {
+                        document.getElementById(file.channels[0].messages[message].id).setAttribute("value", file.channels[0].messages[message].conversation.substring(1))
+                    }
+                }
+            }
+        }
+
+        function dragOverHandler(ev) {
+            ev.preventDefault();
+
+            document.getElementById('drop_zone').style.borderColor = "#0B6EFD"
+            document.querySelector('#drop_zone p').style.color = "#0B6EFD"
+        }
+
+        function dragLeaveHandler() {
+            document.getElementById('drop_zone').style.borderColor = "lightgray"
+            document.querySelector('#drop_zone p').style.color = "lightgray"
+        }
+
+        function exportConvs() {
+            if (confirm('Proceed to generate the annotated dataset?')) {
+                document.getElementById('spinner').hidden = false
+                const convs = document.getElementsByClassName("conversation")
+
+                for (let message in convs) {
+                    if (typeof convs[message] === "object") {
+                        for (let id in file.channels[0].messages) {
+                            if (file.channels[0].messages[id].id === convs[message].id) {
+                                if (convs[message].value !== null) {
+                                    file.channels[0].messages[id].conversation = `T${convs[message].value}`
+                                } else {
+                                    file.channels[0].messages[id].conversation = null
+                                }
+                            }
+                        }
+                    }
+                }
+
+                for (let message in file.channels[0].messages) {
+                    file.channels[0].messages[message].timestamp = file.channels[0].messages[message].timestamp.toISOString()
+                }
+
+                download(JSON.stringify(file), 'annotated_dataset.json', 'text/plain')
+                window.location.href = "/"
+            } else {
+              window.location.href = "annotate"
+            }
+        }
+
+        function download(content, fileName, contentType) {
+            let a = document.createElement("a")
+            let file = new Blob([content], {type: contentType})
+
+            a.href = URL.createObjectURL(file)
+            a.download = fileName
+            a.click()
+        }
+    </script>
+{% endblock %}

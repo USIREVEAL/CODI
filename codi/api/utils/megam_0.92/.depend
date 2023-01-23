@@ -1,0 +1,134 @@
+abffs.cmo : \
+    util.cmo \
+    data.cmo \
+    bfgs.cmo \
+    arry.cmo
+abffs.cmx : \
+    util.cmx \
+    data.cmx \
+    bfgs.cmx \
+    arry.cmx
+adapt.cmo : \
+    util.cmo \
+    data.cmo \
+    cg.cmo \
+    bitvec.cmo \
+    bfgs.cmo
+adapt.cmx : \
+    util.cmx \
+    data.cmx \
+    cg.cmx \
+    bitvec.cmx \
+    bfgs.cmx
+arry.cmo : \
+    intHashtbl.cmo
+arry.cmx : \
+    intHashtbl.cmx
+bfgs.cmo : \
+    wsemlm.cmo \
+    util.cmo \
+    fastdot.cmo \
+    data.cmo \
+    arry.cmo
+bfgs.cmx : \
+    wsemlm.cmx \
+    util.cmx \
+    fastdot.cmx \
+    data.cmx \
+    arry.cmx
+bitvec.cmo :
+bitvec.cmx :
+bns.cmo :
+bns.cmx :
+cGopt.cmo :
+cGopt.cmx :
+cg.cmo : \
+    util.cmo \
+    fastdot.cmo \
+    data.cmo \
+    arry.cmo
+cg.cmx : \
+    util.cmx \
+    fastdot.cmx \
+    data.cmx \
+    arry.cmx
+data.cmo : \
+    util.cmo \
+    arry.cmo
+data.cmx : \
+    util.cmx \
+    arry.cmx
+extLog.cmo :
+extLog.cmx :
+fastdot.cmo :
+fastdot.cmx :
+intHashtbl.cmo :
+intHashtbl.cmx :
+kernelmap.cmo : \
+    util.cmo \
+    data.cmo \
+    arry.cmo
+kernelmap.cmx : \
+    util.cmx \
+    data.cmx \
+    arry.cmx
+main.cmo : \
+    util.cmo \
+    perceptron.cmo \
+    pa.cmo \
+    kernelmap.cmo \
+    data.cmo \
+    cg.cmo \
+    bfgs.cmo \
+    abffs.cmo
+main.cmx : \
+    util.cmx \
+    perceptron.cmx \
+    pa.cmx \
+    kernelmap.cmx \
+    data.cmx \
+    cg.cmx \
+    bfgs.cmx \
+    abffs.cmx
+megam.cmo :
+megam.cmx :
+pa.cmo : \
+    util.cmo \
+    fastdot.cmo \
+    data.cmo \
+    cg.cmo \
+    bfgs.cmo
+pa.cmx : \
+    util.cmx \
+    fastdot.cmx \
+    data.cmx \
+    cg.cmx \
+    bfgs.cmx
+perceptron.cmo : \
+    util.cmo \
+    fastdot.cmo \
+    data.cmo \
+    cg.cmo \
+    bfgs.cmo
+perceptron.cmx : \
+    util.cmx \
+    fastdot.cmx \
+    data.cmx \
+    cg.cmx \
+    bfgs.cmx
+quartic.cmo :
+quartic.cmx :
+radapt.cmo : \
+    util.cmo
+radapt.cmx : \
+    util.cmx
+util.cmo : \
+    intHashtbl.cmo \
+    arry.cmo
+util.cmx : \
+    intHashtbl.cmx \
+    arry.cmx
+wsemlm.cmo : \
+    util.cmo
+wsemlm.cmx : \
+    util.cmx

@@ -1,0 +1,382 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <div class="container" id="stats" style="margin-top:30px; padding: 40px">
+        {% if context.status == 200 %}
+            {% if context.type == 'Validation' %}
+                <div class="row">
+                    <h1> Output Statistics - {{ context.type }} </h1>
+                    <p> The following are some statistics for the most recently ran {{ context.type_raw }} </p>
+                </div>
+
+                <div class="row gx-0" style="margin-bottom: 20px;">
+                    <h2> Statistics </h2>
+                    <p> Here are some performance related statistics for the {{ context.type_raw }} of the model. </p>
+
+                    <div class="card" style="margin-bottom: 20px;">
+                        <div class="card-header" style="margin-bottom: 20px;"> Conversations Micro-Averaged F1 Score </div>
+                            <div class="row gx-0" style="margin-bottom: 20px;">
+                                {% for key, stat in context.statistics.items %}
+                                    {% if 'clustering' in key %}
+                                        <div class="col-md" style="margin-left: 20px">
+                                                <div class="card">
+                                                    <div class="card-header"> {{ key|cut:"-clustering" }} </div>
+                                                    <div class="card-body" style="text-align: right;"> {{ stat.f1_score|floatformat:2 }} </div>
+                                                </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+
+                                <div class="col-md text-center" style="margin-top: 24px !important; max-width: 60px !important;">
+                                    <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#max-entropy" aria-expanded="false" aria-controls="max-entropy">
+                                        <i class="fa fa-angle-down" id="collapse-btn"></i>
+                                    </button>
+                                </div>
+                            </div>
+                    </div>
+
+                    <div class="row gx-0">
+                        <div class="collapse" id="max-entropy">
+                            {% for key, stat in context.statistics.items %}
+                                {% if 'clustering' not in key %}
+                                    <div class="card" style="margin-bottom: 20px">
+                                        <div class="card-header"> {{ key }} Features </div>
+
+                                        <div class="card-body">
+                                            <div class="container-fluid px-0">
+                                                <div class="card" style="margin-bottom: 20px">
+                                                    <div class="card-header"> Classifier Statistics </div>
+
+                                                    <div class="card-body">
+                                                        <div class="container-fluid px-0">
+                                                            <div class="row">
+                                                                <div class="col-sm">
+                                                                    <div class="card">
+                                                                        <div class="card-header"> Accuracy </div>
+                                                                        <div class="card-body" style="text-align: right;"> {{ stat.accuracy|floatformat:2 }} </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-sm">
+                                                                    <div class="card">
+                                                                        <div class="card-header"> Precision </div>
+                                                                        <div class="card-body" style="text-align: right;"> {{ stat.precision|floatformat:2 }} </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-sm">
+                                                                    <div class="card">
+                                                                        <div class="card-header"> Recall </div>
+                                                                        <div class="card-body" style="text-align: right;"> {{ stat.recall|floatformat:2 }} </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-sm">
+                                                                    <div class="card">
+                                                                        <div class="card-header"> F1 Score </div>
+                                                                        <div class="card-body" style="text-align: right;"> {{ stat.f1_score|floatformat:2 }} </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="card">
+                                                    <div class="card-header"> Execution Times (seconds) </div>
+
+                                                    <div class="card-body">
+                                                        <div class="container-fluid px-0">
+                                                            <div class="row">
+                                                                <div class="col-sm">
+                                                                    <div class="card">
+                                                                        <div class="card-header"> Training </div>
+                                                                        <div class="card-body" style="text-align: right;"> {{ stat.times.train_time }} </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-sm">
+                                                                    <div class="card">
+                                                                        <div class="card-header"> Max-Entropy </div>
+                                                                        <div class="card-body" style="text-align: right;"> {{ stat.times.max_entropy_time }} </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-sm">
+                                                                    <div class="card">
+                                                                        <div class="card-header"> Correlation Clustering </div>
+                                                                        <div class="card-body" style="text-align: right;"> {{ stat.times.clustering_time }} </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-sm">
+                                                                    <div class="card">
+                                                                        <div class="card-header"> Total </div>
+                                                                        <div class="card-body" style="text-align: right;"> {{ stat.times.total_time }} </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            <div class="row gx-5">
+                <h2> Conversations </h2>
+                {% if context.type_raw == 'prediction' %}
+                    <p> The following is a color-coded representation of the conversations generated by the model. On the left we can find a list of all messages in chronological order, while on the right the messages are grouped into conversations. click on any message of the right table to know when it was said.  </p>
+                {% else %}
+                    <p> The following is a color-coded comparison of the predicted conversation and the gold set of conversations. The predicted conversations are in the table to the left, while the gold set is in the table to the right. The messages are grouped into blocks of conversations.  </p>
+                {% endif %}
+
+                {% if context.type == 'Prediction' %}
+                    <div class="col-sm" style="padding-right: 120px !important;">
+                        {% for channel in context.community.channels %}
+                            {% if channel.messages|length > 0 %}
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th> # </th>
+                                            <th> Username </th>
+                                            <th> Message </th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        {% for message in channel.time_sorted_messages %}
+                                            <tr id="{{ message.id }}--{{ message.conversationId }}--s" style="background-color: {{ message.color }};">
+                                                <td style="color: white"> {{ message.conversationId }} </td>
+                                                <td style="color: white"> {{ message.author_username }} </td>
+                                                <td style="color: white"> {{ message.text }} </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+
+                    <div class="col-sm" style="padding-left: 120px !important;">
+                        {% for channel in context.conversations.channels %}
+                            {% if channel.conversations|length > 0 %}
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th> # </th>
+                                            <th> Username </th>
+                                            <th> Message </th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        {% for conversation in channel.conversations %}
+                                            {% for message in conversation.messages %}
+                                                <tr id="{{ message.id }}--{{ message.conversationId }}--e" style="background-color: {{ message.color }}; cursor: pointer;">
+                                                    <td style="color: white"> {{ message.conversationId }} </td>
+                                                    <td style="color: white"> {{ message.author_username }} </td>
+                                                    <td style="color: white"> {{ message.text }} </td>
+                                                </tr>
+
+                                                <script>
+                                                    document.getElementById('{{ message.id }}--{{ message.conversationId }}--e').addEventListener("click", () => {
+                                                        let elem = document.getElementById('{{ message.id }}--{{ message.conversationId }}--s')
+                                                        let elem_pos = elem.getBoundingClientRect().top;
+                                                        let offset = elem_pos + window.scrollY - 70;
+
+                                                        window.scrollTo({
+                                                            top: offset,
+                                                            behavior: "smooth"
+                                                        });
+
+                                                        let t = 0
+                                                        let interval = window.setInterval(() => {
+                                                            if (t !== 6) {
+                                                                t++
+
+                                                                if (elem.classList.contains("table-active")) {
+                                                                    elem.classList.remove("table-active")
+                                                                } else {
+                                                                    elem.classList.add("table-active")
+                                                                }
+                                                            } else {
+                                                                elem.classList.remove("table-active")
+                                                                clearInterval(interval)
+                                                            }
+                                                        }, 500)
+                                                    })
+
+                                                    new LeaderLine(
+                                                        document.getElementById('{{ message.id }}--{{ message.conversationId }}--s'),
+                                                        document.getElementById('{{ message.id }}--{{ message.conversationId }}--e'),
+                                                        {
+                                                            startSocket: "right",
+                                                            endSocket: "left",
+                                                            color: '{{ message.color }}',
+                                                            size: 3,
+                                                        }
+                                                    )
+                                                </script>
+                                            {% endfor %}
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="col-sm">
+                        {% for channel in context.conversations.channels %}
+                            {% if channel.conversations|length > 0 %}
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th> # </th>
+                                            <th> Username </th>
+                                            <th> Message </th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        {% for conversation in channel.conversations %}
+                                            {% for message in conversation.messages %}
+                                                <tr id="{{ message.id }}--s" style="background-color: {{ message.color }}; cursor: pointer">
+                                                    <td style="color: white"> {{ message.conversationId }} </td>
+                                                    <td style="color: white"> {{ message.author_username }} </td>
+                                                    <td style="color: white"> {{ message.text }} </td>
+                                                </tr>
+
+                                                <script>
+                                                    document.getElementById('{{ message.id }}--s').addEventListener("click", () => {
+                                                        let elem = document.getElementById('{{ message.id }}--e')
+                                                        let elem_pos = elem.getBoundingClientRect().top;
+                                                        let offset = elem_pos + window.scrollY - 70;
+
+                                                        window.scrollTo({
+                                                            top: offset,
+                                                            behavior: "smooth"
+                                                        });
+
+                                                        let t = 0
+                                                        let interval = window.setInterval(() => {
+                                                            if (t !== 6) {
+                                                                t++
+
+                                                                if (elem.classList.contains("table-active")) {
+                                                                    elem.classList.remove("table-active")
+                                                                } else {
+                                                                    elem.classList.add("table-active")
+                                                                }
+                                                            } else {
+                                                                elem.classList.remove("table-active")
+                                                                clearInterval(interval)
+                                                            }
+                                                        }, 500)
+                                                    })
+                                                </script>
+                                            {% endfor %}
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+
+                    <div class="col-sm">
+                        {% for channel in context.gold %}
+                            {% if channel|length > 0 %}
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th> # </th>
+                                            <th> Username </th>
+                                            <th> Message </th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        {% for conversation in channel %}
+                                            {% for message in conversation %}
+                                                <tr id="{{ message.id }}--e" style="background-color: {{ message.color }}; cursor: pointer;">
+                                                    <td style="color: white"> {{ message.conversationId }} </td>
+                                                    <td style="color: white"> {{ message.author_username }} </td>
+                                                    <td style="color: white"> {{ message.text }} </td>
+                                                </tr>
+
+                                                <script>
+                                                    document.getElementById('{{ message.id }}--e').addEventListener("click", () => {
+                                                        let elem = document.getElementById('{{ message.id }}--s')
+                                                        let elem_pos = elem.getBoundingClientRect().top;
+                                                        let offset = elem_pos + window.scrollY - 70;
+
+                                                        window.scrollTo({
+                                                            top: offset,
+                                                            behavior: "smooth"
+                                                        });
+
+                                                        let t = 0
+                                                        let interval = window.setInterval(() => {
+                                                            if (t !== 6) {
+                                                                t++
+
+                                                                if (elem.classList.contains("table-active")) {
+                                                                    elem.classList.remove("table-active")
+                                                                } else {
+                                                                    elem.classList.add("table-active")
+                                                                }
+                                                            } else {
+                                                                elem.classList.remove("table-active")
+                                                                clearInterval(interval)
+                                                            }
+                                                        }, 500)
+                                                    })
+                                                </script>
+                                            {% endfor %}
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        {% else %}
+            <div class="row">
+                <p>You must first perform a <b>{{ context.type }}</b> operation!</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <script>
+        const elemToObserve = document.getElementById("max-entropy");
+        let prevClassState = elemToObserve.classList.contains('show');
+
+        const observer = new MutationObserver(function (mutations) {
+            mutations.forEach(function (mutation) {
+                if (mutation.attributeName === "class") {
+                    const currentClassState = mutation.target.classList.contains('show');
+                    if (prevClassState !== currentClassState) {
+                        prevClassState = currentClassState;
+
+                        if (currentClassState) {
+                            document.getElementById("collapse-btn").classList.remove("fa-angle-down")
+                            document.getElementById("collapse-btn").classList.add("fa-angle-up")
+                        } else {
+                            document.getElementById("collapse-btn").classList.remove("fa-angle-up")
+                            document.getElementById("collapse-btn").classList.add("fa-angle-down")
+                        }
+                    }
+                }
+            });
+        });
+
+        observer.observe(elemToObserve, {attributes: true});
+    </script>
+{% endblock %}
