@@ -1,5 +1,5 @@
 cff-version: 1.0.0
-message: "If you use this software, please cite it as below."
+message: "If you use CODI for your research, please cite it as below."
 authors:
 - family-names: "Edoardo"
   given-names: "Riggio"
@@ -28,7 +28,7 @@ preferred-citation:
       given-names: "Lanza"
       orcid: "https://orcid.org/0000-0003-4391-0197"
   doi: "TBD"
-  journal: "ICPC 2023 (International Conference on Program Comprehension)"
+  collection-title: "Proceedings of ICPC 2023 (International Conference on Program Comprehension)"
   month: TBD
   start: 1 # First page number
   end: 4 # Last page number
