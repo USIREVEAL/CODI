@@ -120,6 +120,13 @@ On the Hompage of CoDi you can train the model from scratch and disentangle and 
  7. After a successful validation (try, for example, `datasets/json/from_previous_papers/validation.json`) you can also
      check the Statistics box for information about disentanglement performance (e.g., Accuracy, F1-score)
 
+
+# Publications
+
+CODI was presented and used in the following scientific research papers:
+
+ - Riggio, E., Raglianti, M., & Lanza, M. (2023). _Conversation Disentanglement As-a-Service_. Proceedings of ICPC 2023 (International Conference on Program Comprehension), in press, IEEE.
+
 # License
 
 Copyright (c) 2023 Edoardo Riggio, Marco Raglianti, Michele Lanza, REVEAL @ Software Institute - USI, Lugano, Switzerland

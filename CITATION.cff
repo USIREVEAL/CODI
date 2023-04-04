@@ -1,0 +1,38 @@
+cff-version: 1.0.0
+message: "If you use CODI for your research, please cite it as below."
+authors:
+- family-names: "Edoardo"
+  given-names: "Riggio"
+  orcid: "https://orcid.org/0009-0000-5649-3412"
+- family-names: "Marco"
+  given-names: "Raglianti"
+  orcid: "https://orcid.org/0000-0002-6878-5604"
+- family-names: "Michele"
+  given-names: "Lanza"
+  orcid: "https://orcid.org/0000-0003-4391-0197"
+title: "CODI - Conversation Disentanglement Microservice"
+version: 1.0.0
+# doi: TBD
+date-released: 2023-01-23
+url: "https://github.com/USIREVEAL/CODI"
+preferred-citation:
+  type: conference-paper
+  authors:
+    - family-names: "Edoardo"
+      given-names: "Riggio"
+      orcid: "https://orcid.org/0009-0000-5649-3412"
+    - family-names: "Marco"
+      given-names: "Raglianti"
+      orcid: "https://orcid.org/0000-0002-6878-5604"
+    - family-names: "Michele"
+      given-names: "Lanza"
+      orcid: "https://orcid.org/0000-0003-4391-0197"
+  # doi: "TBD"
+  collection-title: "Proceedings of ICPC 2023 (International Conference on Program Comprehension)"
+  # month: TBD
+  start: 1 # First page number
+  end: 4 # Last page number
+  title: "Conversation Disentanglement As-A-Service"
+  # issue: TBD
+  volume: in press
+  year: 2023
